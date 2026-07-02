@@ -1,8 +1,8 @@
 # IMPLEMENTATION.md — Feature 10: Attraktion per KI erstellen (D2)
 
 > **Für den KI-Agenten:** Schritt für Schritt abarbeiten, `[x]` abhaken, am Ende
-> `BACKLOG.md` aktualisieren. **Diese Schritte passieren im n8n-Editor** — die PWA-Seite
-> (`index.html`, `n8n.js`) ist bereits fertig und wird nicht verändert.
+> `BACKLOG.md` aktualisieren. `index.html`/`app.js` sind bereits fertig verdrahtet;
+> `n8n.js` braucht noch Task 1 (Marker D2 auflösen), der Rest passiert im n8n-Editor.
 
 **Ziel:** Aus Name + Kurzbeschreibung eine vollständige Attraktion per KI generieren
 und in `Attractions` speichern.
@@ -37,14 +37,24 @@ sequenceDiagram
 
 ---
 
-## Task 1: Vorlage duplizieren
+## Task 1: `n8n.js`-Marker D2 auflösen
+
+- [ ] In `typeConfig`: Eintrag `'d2_attraction_platzhalter'` in `'attraction'` umbenennen,
+      `ids` auf `['addAttractionName', 'addAttractionDescription']` setzen
+- [ ] Im `switch`: `case 'd2_attraction_platzhalter':` in `case 'attraction':` umbenennen,
+      Payload auf `{ name: val1.trim(), description: val2.trim() }` setzen
+- [ ] **Prüfen (Browser, DevTools Network):** Modal „Attraktion hinzufügen" abschicken
+      löst einen Request an `add-attraction` aus (noch ohne Backend-Verdrahtung ggf. Fehler
+      — das ist erwartet, folgt in Task 2/3)
+
+## Task 2: Vorlage duplizieren
 
 - [ ] `Vorlage-PWA-AddAttraction` im n8n-Workspace duplizieren (eigene Kopie)
 - [ ] **Prüfen:** Webhook, „Basic LLM Chain" (Groq-Modell `llama-3.1-8b-instant`),
       Code-Node „JSON umwandeln" sind vorhanden und bereits verbunden; nur der
       abschließende Data-Table-Node ist leer/nicht verbunden
 
-## Task 2: Data-Table-Node verdrahten
+## Task 3: Data-Table-Node verdrahten
 
 - [ ] Im Code-Node → Data-Table-Node (`operation: insert`) verbinden, `dataTableId`
       auf die bestehende Tabelle `Attractions` setzen
@@ -53,7 +63,7 @@ sequenceDiagram
       geparsten LLM-JSON)
 - [ ] Data-Table-Node → Respond to Webhook verbinden, Workflow aktivieren
 
-## Task 3: End-to-End testen
+## Task 4: End-to-End testen
 
 - [ ] Über die PWA im Modal „Attraktion hinzufügen" Name + Kurzbeschreibung eingeben,
       abschicken
@@ -61,7 +71,7 @@ sequenceDiagram
 - [ ] **Prüfen:** Title/Description entsprechen exakt der Eingabe (nicht vom LLM verändert)
 - [ ] **Prüfen (Browser):** Attraktion erscheint nach Neuladen der Liste (`getAttractions()`)
 
-## Task 4: Fehlerfall prüfen
+## Task 5: Fehlerfall prüfen
 
 - [ ] Testen, was passiert, wenn das LLM keine valide JSON-Antwort liefert (z. B. sehr
       kurze/unklare Beschreibung eingeben)

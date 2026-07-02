@@ -12,8 +12,9 @@
 
 ## Technische Übersicht
 
-**Dateien:** `assets/js/app.js` (Button-Handler `btnSendComment`), `assets/js/n8n.js`
-(`sendDataToN8N`, `showServiceWorkerNotification` — beide bereits implementiert).
+**Dateien:** `assets/js/app.js` (Button-Handler `btnSendComment`, bereits verdrahtet),
+`assets/js/n8n.js` (`sendDataToN8N`-Platzhalter `d1_email_platzhalter` → `'email'`,
+neuer Stub `showServiceWorkerNotification()` — beide **noch offen**, Marker `D1`/`D4`).
 **Backend:** n8n-Vorlage `Vorlage-PWA-SendFeedbackMail` (unverdrahtet) duplizieren.
 **Ablauf (Mermaid):** Konvention → [`docs/diagramme.md`](../../docs/diagramme.md) Abschnitt 5.
 
@@ -35,10 +36,15 @@ sequenceDiagram
 
 ---
 
-## Task 1: PWA-seitigen Aufruf aktivieren
+## Task 1: `n8n.js`-Marker D1 auflösen
 
+- [ ] In `typeConfig`: Eintrag `'d1_email_platzhalter'` in `'email'` umbenennen, `ids` auf
+      `['contactName', 'contactComment']` setzen (wie `'comment'`)
+- [ ] Im `switch`: `case 'd1_email_platzhalter':` in `case 'email':` umbenennen, Payload auf
+      `{ name: val1.trim(), comment: val2.trim(), timestamp: new Date().toISOString(),
+      source: 'Touristik PWA (n8n)', userAgent: navigator.userAgent }` setzen
 - [ ] In `app.js`, Handler zu `btnSendComment`: Zeile
-      `//N8nService.sendDataToN8N('email');` einkommentieren (oder gleichwertig ergänzen)
+      `//N8nService.sendDataToN8N('email');` einkommentieren
 - [ ] **Prüfen (Browser, DevTools Network):** Formular abschicken löst zwei Requests
       aus (`add-comment` und `app-review-email`)
 
@@ -51,8 +57,15 @@ sequenceDiagram
 - [ ] Workflow aktivieren
 - [ ] **Prüfen:** Testkommentar über die PWA abschicken → E-Mail trifft ein
 
-## Task 3: Push-Bestätigung prüfen
+## Task 3: `n8n.js`-Marker D4 auflösen (Push-Bestätigung)
 
+- [ ] `showServiceWorkerNotification(title, options)`-Stub implementieren: Prüfen ob
+      `Notification` unterstützt wird, `navigator.serviceWorker.ready` abwarten,
+      Berechtigung prüfen/anfragen (`Notification.permission`/`requestPermission()`),
+      bei `granted` per `registration.showNotification(title, options)` anzeigen
+- [ ] An der Stelle `console.log("ToDo: D4-Aufruf");`: `if (type === 'email') { await
+      showServiceWorkerNotification('Bewertung gesendet', { body: '...', tag:
+      'review-success' }); }` ergänzen
 - [ ] Im Browser Notification-Berechtigung erteilen
 - [ ] Testkommentar abschicken → Push-Benachrichtigung erscheint nach erfolgreichem
       E-Mail-Versand

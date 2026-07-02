@@ -31,7 +31,10 @@ const N8nService = (function() {
         endpoints: {
             addComment: 'add-comment',
             getAttractions: 'get-attractions',
-            d1: 'optionaleAufgabeD1'
+            // optionale Erweiterungen D1-D3 (s. sendDataToN8N):
+            emailNotification: 'app-review-email',
+            addAttraction: 'add-attraction',
+            chatAttraction: 'chat-attraction'
         },
         timeout: 10000 // 10 Sekunden
     };
@@ -90,6 +93,13 @@ const N8nService = (function() {
     }
     //--------------------------------------------------------------------
 
+    // ToDo D4 (optional): Service-Worker-Push-Benachrichtigung anzeigen (aufgerufen von sendDataToN8N nach type 'email')
+    //--------------------------------------------------------------------
+    async function showServiceWorkerNotification(title, options) {
+        console.log("ToDo: D4");
+    }
+    //--------------------------------------------------------------------
+
     // API - Öffentliche Methoden
     return {
         getResponse: function() {
@@ -135,7 +145,7 @@ const N8nService = (function() {
         /**
          * Zentralisierte Funktion: Liest Felder aus, sendet an n8n und aktualisiert UI
          * @param {string} type - 'comment', 'email', 'attraction' oder 'chat'
-         */        
+         */
         sendDataToN8N: async function(type) {
             // 1. Konfiguration der Felder und Erfolgsmeldungen pro Typ
             const typeConfig = {
@@ -144,11 +154,33 @@ const N8nService = (function() {
                     endpoint: CONFIG.endpoints.addComment,
                     msg: ["Bewertung erfolgreich gespeichert!", "Der Betreiber sieht den Kommentar."]
                 },
-                'd1': {
+                // ToDo D1 (optional): Eintrag 'email' ergaenzen — gleiche Felder wie 'comment'
+                // (contactName/contactComment), aber endpoint: CONFIG.endpoints.emailNotification
+                //--------------------------------------------------------------------
+                'd1_email_platzhalter': {
                     ids: ['d1_1', 'd1_2'],
-                    endpoint: CONFIG.endpoints.d1,
+                    endpoint: CONFIG.endpoints.emailNotification,
                     msg: ["D1", "D1_2"]
+                },
+                //--------------------------------------------------------------------
+                // ToDo D2 (optional): Eintrag 'attraction' ergaenzen — ids:
+                // ['addAttractionName', 'addAttractionDescription'], endpoint:
+                // CONFIG.endpoints.addAttraction
+                //--------------------------------------------------------------------
+                'd2_attraction_platzhalter': {
+                    ids: ['d2_1', 'd2_2'],
+                    endpoint: CONFIG.endpoints.addAttraction,
+                    msg: ["D2", "D2_2"]
+                },
+                //--------------------------------------------------------------------
+                // ToDo D3 (optional): Eintrag 'chat' ergaenzen — ids: ['chatInput'] (nur ein
+                // Feld, kein zweites), endpoint: CONFIG.endpoints.chatAttraction, kein msg noetig
+                //--------------------------------------------------------------------
+                'd3_chat_platzhalter': {
+                    ids: ['d3_1'],
+                    endpoint: CONFIG.endpoints.chatAttraction
                 }
+                //--------------------------------------------------------------------
             };
 
             const config = typeConfig[type];
@@ -176,11 +208,31 @@ const N8nService = (function() {
                         note: val2.trim()
                     };
                     break;
-                case 'd1':
+                // ToDo D1 (optional): case 'email' ergaenzen — payload braucht zusaetzlich
+                // timestamp (new Date().toISOString()), source und navigator.userAgent
+                //--------------------------------------------------------------------
+                case 'd1_email_platzhalter':
                     payload = {
                         datenFuerWorkFlowD1: 'Beispiel'
                     };
-                    break;            
+                    break;
+                //--------------------------------------------------------------------
+                // ToDo D2 (optional): case 'attraction' ergaenzen — payload: { name, description }
+                //--------------------------------------------------------------------
+                case 'd2_attraction_platzhalter':
+                    payload = {
+                        datenFuerWorkFlowD2: 'Beispiel'
+                    };
+                    break;
+                //--------------------------------------------------------------------
+                // ToDo D3 (optional): case 'chat' ergaenzen — payload: { userInput }
+                //--------------------------------------------------------------------
+                case 'd3_chat_platzhalter':
+                    payload = {
+                        datenFuerWorkFlowD3: 'Beispiel'
+                    };
+                    break;
+                //--------------------------------------------------------------------
             }
 
             // 5. Netzwerk-Request
@@ -199,9 +251,20 @@ const N8nService = (function() {
                 const result = await response.json();
 
                 // 6. Erfolg: Eingabefelder im UI mit Erfolgsmeldungen überschreiben
+                // ToDo D3 (optional): Sonderfall 'chat' behandeln — Antwort in #chatOutput
+                // anzeigen (result.answer) statt Eingabefelder zu ueberschreiben; Inputfeld
+                // danach leeren statt mit config.msg zu befuellen
+                //--------------------------------------------------------------------
                 el1.value = config.msg[0];
                 if (el2) el2.value = config.msg[1];
-                
+                //--------------------------------------------------------------------
+
+                // ToDo D4 (optional): nach erfolgreichem 'email'-Versand
+                // showServiceWorkerNotification(...) aufrufen
+                //--------------------------------------------------------------------
+                console.log("ToDo: D4-Aufruf");
+                //--------------------------------------------------------------------
+
                 console.log(`${type} erfolgreich verarbeitet`, result);
                 return result;
 

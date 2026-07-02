@@ -13,7 +13,18 @@ Lösung der vorigen Stufe und führt neue Aufgaben als Marker ein (`// ToDo <Lab
 |---|---|---|---|
 | `A` | — (reiner Startpunkt) | **A1–A5** (Grundgerüst, ServiceWorker) | `00-foundation` |
 | `B` | 00-foundation | **B2–B5** (n8n: CONFIG, addPanel, getAttractions, sendDataToN8N) | `01-attraktionen-laden`, `02-bewertung-senden` |
-| `C` | 00 + 01 + 02 | **C1–C10** (Standort, Karte, Foto, QR) | `03-standort` … `06-qr-scan` |
+| `C` | 00 + 01 + 02 | **C1–C10** (Standort, Karte, Foto, QR) + optional **D1–D4** | `03-standort` … `06-qr-scan`, `07-feedback-mail`, `10-ki-attraktion-erstellen`, `11-ki-chat-assistent` |
+
+**Optionale D-Aufgaben (in `C` enthalten, nicht separat gestuft):** HTML/Buttons für Chat
+und „Attraktion hinzufügen" sind bereits verdrahtet (`app.js` ruft bereits
+`sendDataToN8N('attraction'|'chat')` auf); die Marker liegen in `n8n.js`
+(`typeConfig`/`switch`-Platzhalter `d1_email_platzhalter`/`d2_attraction_platzhalter`/
+`d3_chat_platzhalter` → durch echte Einträge `'email'`/`'attraction'`/`'chat'` ersetzen)
+sowie im neuen Stub `showServiceWorkerNotification()` (D4). Backend-seitig: n8n-Vorlagen
+`Vorlage-PWA-SendFeedbackMail`/`Vorlage-PWA-AddAttraction` duplizieren + verdrahten
+(s. `requirements/07-feedback-mail/`, `requirements/10-ki-attraktion-erstellen/`); für
+`11-ki-chat-assistent` existiert noch keine unverdrahtete Vorlage, nur die Live-Referenz
+`PWA-ChatAttraction`.
 
 Die fachliche Beschreibung, Abnahmekriterien und Schritt-für-Schritt-Anleitung je Aufgabe
 stehen in `requirements/NN-*/` (USERSTORY / FEATURE / IMPLEMENTATION). Das maschinenlesbare

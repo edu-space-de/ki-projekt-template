@@ -1,32 +1,25 @@
 # IMPLEMENTATION.md — Feature 11: KI-Chat-Assistent über Attraktionen (D3)
 
 > **Für den KI-Agenten:** Schritt für Schritt abarbeiten, `[x]` abhaken, am Ende
-> `BACKLOG.md` aktualisieren. **Diese Schritte passieren im n8n-Editor** — die PWA-Seite
-> (`index.html`, `n8n.js`) ist bereits fertig und wird nicht verändert.
+> `BACKLOG.md` aktualisieren. `index.html`/`app.js` sind bereits fertig verdrahtet;
+> `n8n.js` braucht noch Task 1 (Marker D3 auflösen), der Rest passiert im n8n-Editor.
 
 **Ziel:** Freie Fragen zu Attraktionen per RAG-Chat beantworten.
 **Abhängigkeit:** 01-attraktionen-laden abgeschlossen
 **Verantwortlich:** [Name]
 **Branch:** `feature/11-ki-chat-assistent`
 
-> **Abweichung vom Muster der anderen Feature:** Anders als bei `08`/`07`/`10` existiert
-> (Stand 2026-07-02) **keine unverdrahtete Vorlage** für diesen Workflow — nur die fertige
-> Produktivversion `PWA-ChatAttraction`. Task 1 unten beschreibt daher „inspizieren +
-> eigene Kopie ableiten" statt „Vorlage verdrahten". Falls eine echte Übungs-Vorlage
-> (analog zu `Vorlage-PWA-*`) gewünscht ist, ist das ein separater Vorbereitungsschritt
-> (s. `FEATURE.md` → Offene Fragen).
-
 ---
 
 ## Technische Übersicht
 
-**Ort:** n8n-Workspace (`PWA-ChatAttraction` als Referenz), **nicht** `assets/js/`.
+**Dateien:** `assets/js/n8n.js` (Marker D3), n8n-Workspace (`Vorlage-PWA-ChatAttraction`).
 **Ablauf (Mermaid):** Konvention → [`docs/diagramme.md`](../../docs/diagramme.md) Abschnitt 5.
 
 ```mermaid
 sequenceDiagram
     actor Nutzer
-    participant PWA as N8nService (PWA, fertig)
+    participant PWA as N8nService (PWA)
     participant WH as Webhook chat-attraction
     participant DT as Data Table Attractions
     participant Agg as Aggregate-Node
@@ -42,24 +35,30 @@ sequenceDiagram
 
 ---
 
-## Task 1: Referenz-Workflow inspizieren
+## Task 1: `n8n.js`-Marker D3 auflösen
 
-- [ ] `PWA-ChatAttraction` im n8n-Workspace öffnen (read-only ansehen, nicht verändern —
-      ist produktiv/aktiv)
-- [ ] Aufbau nachvollziehen: Webhook → Data-Table „Get row(s)" (`Attractions`,
-      `returnAll: true`) → Aggregate (`aggregateAllItemData`) → „Basic LLM Chain"
-      (Groq `llama-3.1-8b-instant`, Prompt „Urlaubs-Assistent") → Respond to Webhook
-      (`{ answer: $json.text }`)
+- [ ] In `typeConfig`: Eintrag `'d3_chat_platzhalter'` in `'chat'` umbenennen, `ids` auf
+      `['chatInput']` setzen (nur ein Feld, kein `msg` nötig)
+- [ ] Im `switch`: `case 'd3_chat_platzhalter':` in `case 'chat':` umbenennen, Payload auf
+      `{ userInput: val1.trim() }` setzen
+- [ ] Im Erfolgsfall (Abschnitt „6. Erfolg"): Sonderfall `type === 'chat'` ergänzen —
+      Antwort in `document.getElementById('chatOutput')` schreiben
+      (`result.answer.replace(/\n/g, '<br>')`) statt Eingabefelder zu überschreiben;
+      `chatInput` danach leeren
+- [ ] **Prüfen (Browser, DevTools Network):** Chat-Frage abschicken löst einen Request an
+      `chat-attraction` aus (noch ohne Backend-Verdrahtung ggf. Fehler — folgt in Task 2/3)
 
-## Task 2: Eigene Kopie anlegen (falls Team-Isolation gewünscht)
+## Task 2: Vorlage-Workflow duplizieren + Prompt ergänzen
 
-- [ ] `PWA-ChatAttraction` duplizieren (eigene Kopie, **nicht** die produktive Version
-      verändern)
-- [ ] In der Kopie: `dataTableId` ggf. auf eine eigene Attraktions-Tabelle umstellen,
-      falls das Team nicht die geteilte `Attractions`-Table nutzen soll
-- [ ] Workflow aktivieren, eigenen Webhook-Pfad notieren (falls abweichend von
-      `chat-attraction`, `CONFIG.endpoints.chatAttraction` in der PWA entsprechend
-      anpassen — sonst unverändert lassen)
+- [ ] `Vorlage-PWA-ChatAttraction` im n8n-Workspace duplizieren (eigene Kopie)
+- [ ] **Prüfen:** Webhook → Data-Table „Get row(s)" (`Attractions`) → Aggregate → „Basic
+      LLM Chain" (Groq `llama-3.1-8b-instant`) → Respond to Webhook sind bereits verbunden;
+      der Prompt-Text der LLM-Chain-Node ist **leer** (Platzhalter)
+- [ ] Prompt ergänzen: Rolle „Urlaubs-Assistent", Auftrag „finde die zur Nutzerfrage
+      passende Attraktion in den übergebenen Daten, antworte in Fließtext, erfinde nichts
+      falls keine passt"; Daten (`{{ JSON.stringify($json.data) }}`) und Nutzerfrage
+      (`{{ $('Webhook1').item.json.body.userInput }}`) im Prompt referenzieren
+- [ ] Workflow aktivieren
 
 ## Task 3: End-to-End testen
 
@@ -67,7 +66,9 @@ sequenceDiagram
 - [ ] **Prüfen:** Antwort erwähnt die richtige Attraktion mit plausiblen Details
 - [ ] Frage zu etwas testen, das nicht in den Daten vorkommt
 - [ ] **Prüfen:** Assistent gibt ehrlich zu, nichts Passendes zu finden (kein Erfinden)
-- [ ] **Commit:** `git commit -m "feat(ki-chat): Chat-Assistent inspiziert/eigene Kopie verdrahtet (D3)"`
+- [ ] Mehrere Fragen nacheinander stellen → **Prüfen:** Inputfeld wird nach jeder Antwort
+      geleert, `chatOutput` bleibt lesbar (kein Überschreiben alter Antworten ohne Sinn)
+- [ ] **Commit:** `git commit -m "feat(ki-chat): Marker D3 aufgeloest + Vorlage-Workflow verdrahtet"`
 
 ---
 
