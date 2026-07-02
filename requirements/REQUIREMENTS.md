@@ -61,15 +61,31 @@ bzw. `FEATURE.md` (nicht hier duplizieren).
 | Ausführung | Statische Vanilla-PWA (Bulma, kein Build); läuft über `http://localhost` (secure context), nicht `file://` |
 | Sicherheit | Keine Anmeldung/keine vertraulichen Daten im Browser; Kamera/Standort nur nach Freigabe |
 | Bedienbarkeit | Für Tourist:innen ohne Einweisung nutzbar; responsive (Bulma) |
-| Backend | Datenanbindung ausschließlich über n8n-Webhooks (Low-Code) |
+| Backend | Datenanbindung über n8n (Low-Code): Webhooks + **n8n Data Tables (Mindestanforderung)**; NocoDB als Bonus optional |
 | Umfang | Siehe „Abgrenzung" |
 
 ---
 
 ## Abgrenzung — was wir nicht bauen
 
-- Kein eigenes Backend/keine eigene Datenbank (nur n8n-Webhooks)
+- Kein eigenes (selbstgeschriebenes) Backend — Datenhaltung läuft über n8n selbst
+  (Webhooks + **Data Tables**, beides Mindestanforderung)
+- Kein Zwang zu NocoDB — Bonus/Erweiterung, kein Kernumfang
 - Keine Nutzer-Anmeldung/Registrierung
 - Keine Offline-Karten (Google Maps braucht Netz)
 - Keine dauerhafte Server-Speicherung von Fotos
 - Keine native App (PWA, „Add to Homescreen")
+
+---
+
+## Datenhaltung — n8n Data Tables (Pflicht) + NocoDB (Bonus)
+
+> Ergänzung 2026-07-01: Zusätzlich zu den reinen n8n-Webhooks wird eine persistente
+> Datenhaltung verlangt bzw. angeboten — zwei unterschiedlich verbindliche Stufen.
+
+| Stufe | Was | Status | Warum |
+|---|---|---|---|
+| 1 | **n8n Data Tables** (natives n8n-Feature) hinter den bestehenden Webhooks (`get-attractions`, `add-comment`, `add-attraction` …) als persistente Ablage | **Mindestanforderung** — für alle Teams verbindlich, MCP-fähig (`create_data_table`, `add_data_table_rows`, `add_data_table_column` …) | Bleibt Low-Code, kein zusätzlicher Server — verletzt ADR-01 nicht |
+| 2 | **NocoDB** als zusätzliche/alternative Datenhaltung | **Bonus, optional** — kein Muss, aber ausdrücklich empfohlen | Zukunftsweisend für diese Zielgruppe: eigene REST-API + eigener MCP-Server (Base/Table-Schema, CRUD über `queryRecords`/`createRecords`/`updateRecords`) zeigt, wie KI-Agenten direkt strukturiert auf Projektdaten zugreifen können |
+
+Details/Architektur-Begründung: `ARCHITECTURE.md` → ADR-03. Backlog-Einträge: `BACKLOG.md` → Feature 08 (Pflicht), Feature 09 (Bonus).

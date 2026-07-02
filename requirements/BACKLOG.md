@@ -14,8 +14,11 @@
 | 01 | Attraktionen laden (n8n) | offen | [Name] | `feature/01-attraktionen-laden` |
 | 02 | Bewertung senden (n8n) | offen | [Name] | `feature/02-bewertung-senden` |
 | 03 | Standort (Geolocation) | offen | [Name] | `feature/03-standort` |
+| 08 | Datenhaltung: n8n Data Tables *(Mindestanforderung)* | offen | [Name] | `feature/08-datenhaltung` |
 
-**Kritischer Pfad:** `00 → 01 → 02` (diese Kette muss für die Demo stehen; `03` für Karte)
+**Kritischer Pfad:** `00 → 01 → 02` (diese Kette muss für die Demo stehen; `03` für Karte).
+**Zusätzlich Pflicht (unabhängig vom Demo-Pfad):** `08` — n8n Data Tables statt reinem
+Nur-JSON-Webhook, für alle Teams verbindlich.
 
 ---
 
@@ -27,6 +30,7 @@
 | 05 | Foto (Kamera) | offen | [Name] | `feature/05-foto` |
 | 06 | QR-Scan (jsQR) | offen | [Name] | `feature/06-qr-scan` |
 | 07 | Erweiterungen (Push u. a.) *(optional)* | offen | [Name] | `feature/07-erweiterungen` |
+| 09 | Datenhaltung mit NocoDB *(Bonus, zukunftsweisend — MCP-fähig für KI-Agenten)* | offen | [Name] | `feature/09-nocodb` |
 
 ---
 

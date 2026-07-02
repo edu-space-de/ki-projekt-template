@@ -24,10 +24,10 @@ offline, Attraktionen aus n8n sichtbar, Bewertung sendbar).
 |---|---|---|
 | Frontend | HTML + **Bulma-CSS** + Vanilla-JS (IIFE-Module) | Kein Build, kein npm — direkt im Browser lauffähig |
 | „Backend" | **n8n-Webhooks** (Low-Code) | Kein eigener Server nötig; Workflows statt Code |
-| Datenhaltung | n8n liefert JSON; `localStorage` (Position, Foto, letzte Daten) | Ausreichend für die Übung; keine DB |
+| Datenhaltung | n8n liefert JSON (Webhooks) + **n8n Data Tables** (Mindestanforderung, persistente Ablage); `localStorage` (Position, Foto, letzte Daten) | **NocoDB** als Bonus/optional (s. ADR-03) — zukunftsweisend für MCP-gestützte KI-Agenten-Workflows, kein Kernumfang |
 | PWA | ServiceWorker (cache-first) + `manifest.json` | Offline-Fähigkeit + „Add to Homescreen" |
 | Tests/Abnahme | **Browser-Verifikation** (DevTools); optional vitest für reine Logik | Statische PWA hat keinen Test-Runner — s. `docs/setup.md` |
-| Externe Dienste | **Google Maps** (Karte), **jsQR** (QR) | Karte/Marker bzw. QR-Erkennung |
+| Externe Dienste | **Karte: Google Maps** (Key) **oder Leaflet + OSM** (keyfrei, s. ADR-04), **jsQR** (QR) | Karte/Marker bzw. QR-Erkennung |
 | Deployment | Statisch (Webserver/SFTP); lokal via **Live Server** (`http://localhost`) | Secure context nötig (ServiceWorker/Kamera/Geo) |
 
 ---
@@ -194,9 +194,49 @@ Logik optional mit vitest. Details: `docs/setup.md` → „Verifikation: PWA vs.
 
 ---
 
+### ADR-03: n8n Data Tables verbindlich (Mindestanforderung); NocoDB als zukunftsweisender Bonus
+
+**Datum:** 2026-07-01 · **Status:** akzeptiert
+**Kontext:** Die n8n-Webhooks liefern/verarbeiten JSON, ohne selbst eine Ablage zwischen
+Aufrufen zu haben (z. B. `add-attraction` legt aktuell nichts persistent an). Eine
+Datenhaltung wird ergänzt, ohne die Nicht-eigenes-Backend-Prämisse aus ADR-01 zu brechen.
+**Entscheidung — Mindestanforderung:** **n8n Data Tables** (natives n8n-Feature) hinter
+den bestehenden Webhooks nutzen — für alle Teams verbindlich. Bleibt Low-Code, kein
+zusätzlicher Server; per MCP ansteuerbar (`create_data_table`, `add_data_table_rows`,
+`add_data_table_column`, `search_data_tables` u. a. — bereits als Tools verfügbar).
+**Entscheidung — Bonus (optional, ausdrücklich empfohlen):** **NocoDB** als zusätzliche
+Datenhaltung, sobald KI-Agenten direkt (lesend/schreibend) auf Projektdaten zugreifen
+sollen. NocoDB bringt eine eigene REST-API sowie MCP-Server (Base-/Table-Schema, CRUD über
+`queryRecords`/`createRecords`/`updateRecords`/`aggregate`) mit — genau die Kombination
+(No-Code-DB + MCP), die für diese Zielgruppe zukunftsweisend ist und im
+CONTIC-Unternehmenskontext bereits produktiv eingesetzt wird. Kein Muss, aber klar
+gewünschte Erweiterung.
+**Konsequenzen:** Data Tables ersetzen das reine „nur JSON über Webhooks" (ADR-01 bleibt
+im Grundsatz gültig — weiterhin kein selbstgeschriebener Server). NocoDB bleibt ein
+zusätzlicher externer Dienst pro Team/Projekt; Umsetzung dokumentieren Teams selbst
+(`BACKLOG.md` Feature 09).
+
+---
+
+### ADR-04: Karte — Google Maps ODER Leaflet/OSM (keyfrei)
+
+**Datum:** 2026-07-01 · **Status:** akzeptiert
+**Kontext:** `04-karte` nutzte Google Maps → API-Key nötig; dieser Key ist versehentlich als
+Secret ins öffentliche Repo gelangt (Historie bereinigt). Ein keyfreier Weg senkt Aufwand
+und Secret-Risiko, ohne Google auszuschließen.
+**Entscheidung:** Zwei gleichwertige Varianten für `MapService.showMap()`:
+**A) Google Maps** (API-Key, `<script>`-Include; Key nie committen) — für Google-spezifische
+Features/Geocoder. **B) Leaflet + OpenStreetMap** (keyfrei, CDN-Include; Reverse-Geocoding
+optional via Nominatim) — **empfohlen zum Start**. Details/Code: `requirements/04-karte/`.
+**Konsequenzen:** Variante B benötigt keinen Key/kein Secret-Handling, aber OSM-Tile- und
+Nominatim-Nutzungsrichtlinien (Attribution, Rate-Limit) beachten; `#mapOutput` braucht eine
+CSS-Höhe. Google bleibt als Variante A erhalten.
+
+---
+
 ## Bekannte Einschränkungen
 
-- Kein eigenes Backend/keine DB — Datenanbindung nur über n8n-Webhooks
-- Google Maps benötigt Netz + API-Key (keine Offline-Karten)
+- Kein selbstgeschriebenes Backend — Datenanbindung über n8n (Webhooks + Data Tables, Mindestanforderung); NocoDB als Bonus (ADR-03)
+- Karte: Variante A (Google Maps) braucht Netz + API-Key; Variante B (Leaflet/OSM) ist keyfrei, aber ebenfalls online (keine Offline-Karten) — s. ADR-04
 - Fotos nur flüchtig (Object-URL/localStorage), kein Server-Upload im Kernumfang
 - Läuft nur im secure context (`http://localhost` / HTTPS), nicht per `file://`
