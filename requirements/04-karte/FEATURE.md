@@ -26,12 +26,21 @@ ein `Geocoder` die postalische Adresse der aktuellen Position und zeigt sie in `
 
 ---
 
+## Kartenanbieter — zwei Varianten (eine genügt)
+
+| Variante | Anbieter | API-Key? | Empfehlung |
+|---|---|---|---|
+| **A** | Google Maps | **ja** (`DEIN_GOOGLE_MAPS_API_KEY` in `index.html`, nie committen) | wenn Google-Features/Geocoder gewünscht |
+| **B** | **Leaflet + OpenStreetMap** | **nein (keyfrei)** | **empfohlen zum Start** — nichts zu beantragen, kein Secret-Risiko |
+
+Beide erfüllen dieselben Abnahmekriterien. Details/Code: `IMPLEMENTATION.md`. Architektur-Begründung: `ARCHITECTURE.md` → ADR-04.
+
 ## Abnahmekriterien
 
-- [ ] **C4** — Karte in `#mapOutput` mit zwei Markern (Position + Attraktion), `fitBounds` umfasst beide
+- [ ] **C4** — Karte in `#mapOutput` mit zwei Markern (Position + Attraktion), Ausschnitt umfasst beide (`fitBounds`) — **mit Variante A oder B**
 - [ ] Ohne bestimmte Position: `alert('Bitte vorher Position bestimmen!')` und Abbruch
-- [ ] **C5** *(optional)* — Reverse-Geocoding zeigt die aktuelle Adresse in `#adressOutput`
-- [ ] Google-Maps-API-Key ist eingebunden und funktioniert
+- [ ] **C5** *(optional)* — aktuelle Adresse in `#adressOutput` (Google Geocoder bzw. keyfrei via Nominatim)
+- [ ] Gewählte Variante lädt fehlerfrei (Google-Key eingebunden **oder** Leaflet/OSM keyfrei)
 
 ---
 
@@ -45,5 +54,5 @@ ein `Geocoder` die postalische Adresse der aktuellen Position und zeigt sie in `
 
 ## Offene Fragen
 
-- [ ] Wie wird der API-Key sicher/pro Umgebung hinterlegt?
-- [ ] Kartenanbieter-Wechsel (z. B. Leaflet/OSM) als Alternative sinnvoll?
+- [ ] (Variante A) Wie wird der Google-API-Key sicher/pro Umgebung hinterlegt (nicht committen)?
+- [x] Kartenanbieter-Wechsel geklärt: **Leaflet/OSM als keyfreie Variante B** ergänzt (2026-07-01); Google Maps bleibt Variante A.
