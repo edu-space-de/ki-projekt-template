@@ -28,6 +28,7 @@ offline, Attraktionen aus n8n sichtbar, Bewertung sendbar).
 | PWA | ServiceWorker (cache-first) + `manifest.json` | Offline-Fähigkeit + „Add to Homescreen" |
 | Tests/Abnahme | **Browser-Verifikation** (DevTools); optional vitest für reine Logik | Statische PWA hat keinen Test-Runner — s. `docs/setup.md` |
 | Externe Dienste | **Karte: Google Maps** (Key) **oder Leaflet + OSM** (keyfrei, s. ADR-04), **jsQR** (QR) | Karte/Marker bzw. QR-Erkennung |
+| KI (optional, D2/D3) | **Groq** (`llama-3.1-8b-instant`) via n8n-LangChain-Node (s. ADR-05) | Attraktion generieren (`10`), Chat-Assistent (`11`) — kein Kernumfang |
 | Deployment | Statisch (Webserver/SFTP); lokal via **Live Server** (`http://localhost`) | Secure context nötig (ServiceWorker/Kamera/Geo) |
 
 ---
@@ -231,6 +232,25 @@ optional via Nominatim) — **empfohlen zum Start**. Details/Code: `requirements
 **Konsequenzen:** Variante B benötigt keinen Key/kein Secret-Handling, aber OSM-Tile- und
 Nominatim-Nutzungsrichtlinien (Attribution, Rate-Limit) beachten; `#mapOutput` braucht eine
 CSS-Höhe. Google bleibt als Variante A erhalten.
+
+---
+
+### ADR-05: Optionale KI-Erweiterungen (D1–D4) — Groq-LLM via n8n-LangChain-Nodes
+
+**Datum:** 2026-07-02 · **Status:** akzeptiert
+**Kontext:** Die Musterlösung (`C_ML_inkl_D`) enthält vier optionale LB3-Erweiterungen
+zum Bewertungsformular (`sendDataToN8N(type)`): **D1** E-Mail-Benachrichtigung (`07`),
+**D2** KI-generierte Attraktion (`10`), **D3** RAG-Chat-Assistent (`11`), **D4** Push-
+Bestätigung nach D1 (`07`). D2/D3 nutzen dafür ein LLM (Groq, `llama-3.1-8b-instant`)
+über n8n-LangChain-Nodes (`chainLlm`, `lmChatGroq`) statt eines eigenen KI-Service.
+**Entscheidung:** Groq via n8n-LangChain-Node als Referenzimplementierung für D2/D3 —
+konsistent mit dem Low-Code-Ansatz (ADR-01), kein zusätzlicher Server, Modellwahl bleibt
+austauschbar. D3 nutzt bewusst „alle Zeilen laden + LLM" statt einer echten Vektorsuche
+(RAG-Minimalvariante, angemessen für die geringe Datenmenge der Übung).
+**Konsequenzen:** D2/D3 sind vollständig optional — `00`–`06`/`08` funktionieren ohne
+LLM-Zugriff. Beide PWA-seitig bereits fertig implementiert; die Lernaufgabe liegt im
+n8n-Backend (Prompt/Data-Table-Verdrahtung verstehen und nachbauen), nicht im PWA-Code.
+D3 hat (Stand 2026-07-02) noch keine unverdrahtete Übungs-Vorlage — nur die Live-Referenz.
 
 ---
 

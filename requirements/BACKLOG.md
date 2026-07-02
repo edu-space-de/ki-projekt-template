@@ -29,8 +29,10 @@ Nur-JSON-Webhook, für alle Teams verbindlich.
 | 04 | Karte (Google Maps) | offen | [Name] | `feature/04-karte` |
 | 05 | Foto (Kamera) | offen | [Name] | `feature/05-foto` |
 | 06 | QR-Scan (jsQR) | offen | [Name] | `feature/06-qr-scan` |
-| 07 | Erweiterungen (Push u. a.) *(optional)* | offen | [Name] | `feature/07-erweiterungen` |
+| 07 | Bewertung per E-Mail + Push *(optional D1+D4)* | offen | [Name] | `feature/07-feedback-mail` |
 | 09 | Datenhaltung mit NocoDB *(Bonus, zukunftsweisend — MCP-fähig für KI-Agenten)* | offen | [Name] | `feature/09-nocodb` |
+| 10 | Attraktion per KI erstellen *(optional D2)* | offen | [Name] | `feature/10-ki-attraktion-erstellen` |
+| 11 | KI-Chat-Assistent über Attraktionen *(optional D3)* | offen | [Name] | `feature/11-ki-chat-assistent` |
 
 ---
 

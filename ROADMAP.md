@@ -18,10 +18,12 @@
             │       └── 04-karte (Google Maps; braucht aktuelle Position)
             ├── 05-foto (Kamera; technisch unabhängig)
             └── 06-qr-scan (jsQR; technisch unabhängig)
-    (07-erweiterungen: optional, Push u. a. — baut auf 02)
+    (07-feedback-mail: optional D1+D4, baut auf 02 — Bewertung per E-Mail + Push-Benachrichtigung)
     (08-datenhaltung: n8n Data Tables — Mindestanforderung, technisch unabhängig,
      ergänzt 01/02, s. ARCHITECTURE.md ADR-03)
     (09-nocodb: Bonus/optional, baut auf 08 — zukunftsweisend, MCP-fähig für KI-Agenten)
+    (10-ki-attraktion-erstellen: optional D2, baut auf 02 — KI generiert Attraktionsdaten)
+    (11-ki-chat-assistent: optional D3, baut auf 01 — RAG-Chat über Attraktionen)
 ```
 
 **Kritischer Pfad:** `00 → 01 → 02` (minimale, demo-fähige Kette: App läuft, Attraktionen
@@ -41,8 +43,11 @@ Nach `01` sind `03`, `05`, `06` parallel bearbeitbar; `04` braucht `03`.
 | 04-karte | [Name] | `feature/04-karte` | 03 |
 | 05-foto | [Name] | `feature/05-foto` | 01 |
 | 06-qr-scan | [Name] | `feature/06-qr-scan` | 01 |
+| 07-feedback-mail *(optional D1+D4)* | [Name] | `feature/07-feedback-mail` | 02 |
 | 08-datenhaltung *(Mindestanforderung)* | [Name] | `feature/08-datenhaltung` | 01 |
 | 09-nocodb *(Bonus)* | [Name] | `feature/09-nocodb` | 08 |
+| 10-ki-attraktion-erstellen *(optional D2)* | [Name] | `feature/10-ki-attraktion-erstellen` | 02 |
+| 11-ki-chat-assistent *(optional D3)* | [Name] | `feature/11-ki-chat-assistent` | 01 |
 
 ---
 
