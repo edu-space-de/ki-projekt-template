@@ -20,18 +20,26 @@ Push-Bestätigung auf dem Gerät (D4).
 
 ## Beschreibung
 
-`sendDataToN8N(type)` unterstützt bereits den Typ `'email'` (Payload: `name`, `comment`,
-`timestamp`, `source`, `userAgent`) neben `'comment'`. Der Button-Handler zu
-`btnSendComment` in `app.js` ruft aktuell nur `sendDataToN8N('comment')` auf; der
-`'email'`-Aufruf steht bereits daneben, aber **auskommentiert**. Backend: n8n-Workflow
-hinter `app-review-email` (Endpunkt aus `CONFIG.endpoints.emailNotification`) formatiert
-die Daten und versendet eine HTML-E-Mail. Nach erfolgreichem `'email'`-Versand ruft
-`sendDataToN8N` automatisch `showServiceWorkerNotification()` auf (D4) — eine
-Service-Worker-Push-Bestätigung auf dem Gerät der/des Nutzenden.
+`sendDataToN8N(type)` unterstützt bereits den Typ `'comment'`; der Platzhalter
+`d1_email_platzhalter` in `typeConfig`/`switch` markiert die Stelle, an der ein Eintrag
+für `'email'` (Payload: `name`, `comment`, `timestamp`, `source`, `userAgent`) ergänzt
+werden muss (Marker **D1**). Der Button-Handler zu `btnSendComment` in `app.js` ruft
+aktuell nur `sendDataToN8N('comment')` auf; der `'email'`-Aufruf steht bereits daneben,
+aber **auskommentiert**. Backend: n8n-Workflow hinter `app-review-email` (Endpunkt aus
+`CONFIG.endpoints.emailNotification`, bereits in `CONFIG` hinterlegt) formatiert die
+Daten und versendet eine HTML-E-Mail. Nach erfolgreichem `'email'`-Versand soll
+`sendDataToN8N` `showServiceWorkerNotification()` aufrufen (Marker **D4**, aktuell ein
+`console.log`-Stub) — eine Service-Worker-Push-Bestätigung auf dem Gerät der/des
+Nutzenden.
 
 **Backend-Übung (n8n-seitig):** Wie bei `08-datenhaltung` existiert eine unverdrahtete
 Vorlage (`Vorlage-PWA-SendFeedbackMail`) im n8n-Workspace — duplizieren + verdrahten
 (Webhook → Set/Edit-Fields → Send-Email-Node), statt neu zu bauen.
+
+**Alternativer Ansatz (laut LB3-Folie 109):** Statt eines eigenständigen Workflows kann
+auch der bestehende `add-comment`-Workflow (aus `02-bewertung-senden`) erweitert werden,
+sodass er die Mail direkt versendet, sobald die neue Zeile in `Comments` angelegt wurde —
+dann ist kein zweiter Request (`sendDataToN8N('email')`) von der PWA-Seite nötig.
 
 ---
 
@@ -53,9 +61,6 @@ Vorlage (`Vorlage-PWA-SendFeedbackMail`) im n8n-Workspace — duplizieren + verd
 - Keine Push-Benachrichtigung unabhängig vom E-Mail-Versand (im Code fest an
   `type === 'email'` gekoppelt)
 - Kein Double-Opt-in/Unsubscribe für die Benachrichtigungen
-- Keine eigene `stufen/`-Übungsstufe mit `//------`-Markern für D1/D4 — die PWA-Seite
-  ist in der Musterlösung bereits fertig, die Übung liegt im n8n-seitigen Verdrahten
-  (s. `_meta/task.md`, offener Punkt „stufen/D fehlt")
 
 ---
 
@@ -63,5 +68,5 @@ Vorlage (`Vorlage-PWA-SendFeedbackMail`) im n8n-Workspace — duplizieren + verd
 
 - [ ] Soll `'email'` den Data-Table-Save (`'comment'`) ersetzen oder wie in der
       Musterlösung zusätzlich dazu laufen?
-- [ ] Soll es eine eigene `stufen/D`-Stufe mit Markern für Studierende geben, oder bleibt
-      dieses Feature ausschließlich eine n8n-seitige Übung mit vorgegebenem PWA-Code?
+- [ ] Alternativer Ansatz (Mail direkt bei Data-Table-Insert, s. o.) statt eigenem
+      Workflow umsetzen — oder beide Varianten als Wahlmöglichkeit dokumentieren?

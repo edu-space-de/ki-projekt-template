@@ -38,6 +38,12 @@ das Ergebnis als neue Zeile in `Attractions` (dieselbe Tabelle wie `08-datenhalt
 + Code-Node vorhanden, Data-Table-Node **leer**) duplizieren + die Data-Table-Verbindung
 auf `Attractions` setzen.
 
+**Bonus-Erweiterung (laut LB3-Folie 110):** Aktuell übernimmt das LLM Name/Beschreibung
+unverändert und generiert nur die restlichen Felder. Als Erweiterung darf das LLM auch
+die **Kurzbeschreibung selbst ergänzen/ausformulieren**, statt nur die knappe
+Nutzereingabe zu übernehmen — dazu die „Data Preservation"-Vorgabe im Prompt für
+`description` lockern.
+
 ---
 
 ## Abnahmekriterien
@@ -53,6 +59,8 @@ auf `Attractions` setzen.
 - [ ] Neue Attraktion erscheint nach Neuladen in der normalen Liste (`get-attractions`)
 - [ ] Fehlerfall (LLM liefert kein valides JSON): kein Absturz, Code-Node gibt
       `{error, raw}` zurück statt zu werfen
+- [ ] *(Bonus)* LLM ergänzt/verbessert auch die Kurzbeschreibung, statt sie nur
+      unverändert zu übernehmen
 
 ---
 
