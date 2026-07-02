@@ -33,43 +33,47 @@ sequenceDiagram
 
 ---
 
-## Task 1: Data Table „Attractions" anlegen
+> **Referenz-Setup:** Im edu-space-n8n-Workspace existieren die Data Tables `Attractions`
+> und `Comments` bereits zentral (Musterlösung), und dazu passende **unverdrahtete
+> Vorlage-Workflows** (`Vorlage-PWA-GetAttractions`, `Vorlage-PWA-AddComment`) — das
+> n8n-seitige Gegenstück zu den `//------`-Markern im PWA-Code. Der Weg unten ist daher
+> „Vorlage duplizieren + verdrahten", **nicht** „von Grund auf neu bauen".
 
-- [ ] In n8n: neue Data Table `Attractions` mit Spalten `AttractionID` (number), `Title`,
-      `Description`, `Latitude`, `Longitude`, `Address`, `Telephone`, `Email`, `URL` (alle
-      string, außer Latitude/Longitude als number)
-- [ ] Bisherige Demodaten aus `stufen/*/assets/js/n8n.js` (`dbResponse`) als Startzeilen
-      übertragen
-- [ ] **Prüfen:** Tabelle enthält mindestens die bisherigen Demo-Attraktionen
+## Task 1: Vorlage-Workflows duplizieren
 
-## Task 2: `get-attractions`-Workflow umstellen
+- [ ] `Vorlage-PWA-GetAttractions` und `Vorlage-PWA-AddComment` im n8n-Workspace duplizieren
+      (eigene Kopie pro Team, z. B. `<Team>-PWA-GetAttractions`)
+- [ ] **Prüfen:** Beide Kopien sind inaktiv, Webhook-Node ist vorhanden, aber (noch) nicht
+      mit dem Data-Table-Node verbunden — das ist der Ausgangszustand
 
-- [ ] Im Workflow hinter dem Webhook `get-attractions`: Data-Table-Node (`resource: row`,
-      `operation: getRows`/`search`) auf `Attractions` einfügen, Ergebnis als Response
-      zurückgeben (Format wie bisher: Array von Attraktions-Objekten)
+## Task 2: `get-attractions`-Kopie verdrahten
+
+- [ ] Im duplizierten Workflow: Webhook → Data-Table-Node (`operation: get`, `returnAll: true`)
+      verbinden, als `dataTableId` die bestehende Tabelle `Attractions` auswählen → Data-Table-
+      Node → `Respond to Webhook` (`respondWith: allIncomingItems`) verbinden
+- [ ] Workflow aktivieren
 - [ ] **Prüfen (Browser):** PWA lädt die Liste weiterhin korrekt (`getAttractions()` in
-      `n8n.js` unverändert)
+      `n8n.js` unverändert, ruft weiterhin `CONFIG.endpoints.getAttractions`)
 
-## Task 3: Data Table „Comments" anlegen
+## Task 3: `add-comment`-Kopie verdrahten
 
-- [ ] Neue Data Table `Comments` mit Spalten `Name`, `Note`, `CreatedAt`
-- [ ] **Prüfen:** Tabelle ist leer, aber mit korrektem Schema angelegt
-
-## Task 4: `add-comment`-Workflow umstellen
-
-- [ ] Im Workflow hinter dem Webhook `add-comment`: nach Empfang des Payloads
-      (`name`, `note`) einen Data-Table-Node (`resource: row`, `operation: insert`) auf
-      `Comments` einfügen, `CreatedAt` per n8n-Expression (`$now`) setzen
-- [ ] Response an die PWA bleibt wie bisher (Erfolgsmeldung)
+- [ ] Im duplizierten Workflow: Webhook → Data-Table-Node (`operation: insert`) verbinden,
+      als `dataTableId` die bestehende Tabelle `Comments` auswählen, Spalten-Mapping
+      `Name: {{ $json.body.name }}`, `Note: {{ $json.body.note }}` (Mapping-Mode
+      **„Expression", nicht „Fixed"** — Sticky Note in der Vorlage weist explizit darauf hin)
+      → `Respond to Webhook` verbinden
+- [ ] Workflow aktivieren
 - [ ] **Prüfen (Browser):** Bewertungsformular in der PWA abschicken → Erfolgsmeldung
       erscheint
 
-## Task 5: Persistenz verifizieren
+## Task 4: Persistenz verifizieren
 
-- [ ] Nach Task 4: n8n-Workflow einmal deaktivieren/reaktivieren (oder n8n neu starten,
-      falls möglich)
-- [ ] **Prüfen:** die zuvor eingetragene Bewertung ist weiterhin in `Comments` vorhanden
-- [ ] **Commit:** `git commit -m "feat(datenhaltung): n8n Data Tables für Attraktionen/Bewertungen"`
+- [ ] Über die PWA einen Testkommentar abschicken
+- [ ] In der Data Table `Comments` (n8n-UI) prüfen: neue Zeile mit den eingegebenen Werten
+      ist vorhanden
+- [ ] **Prüfen:** Workflow einmal deaktivieren/reaktivieren — Zeile bleibt erhalten
+      (Data Tables sind unabhängig vom Workflow-Zustand persistent)
+- [ ] **Commit:** `git commit -m "feat(datenhaltung): Vorlage-Workflows dupliziert + verdrahtet (Data Tables)"`
       (Commit dokumentiert die Umstellung — die eigentliche Änderung liegt im n8n-Workspace,
       nicht im Repo; ggf. Screenshot/Export der Workflow-Konfiguration beilegen)
 

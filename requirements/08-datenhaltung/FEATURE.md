@@ -20,31 +20,32 @@ im Workflow zu halten und Bewertungen gar nicht zu speichern.
 
 ## Beschreibung
 
-Zwei Data Tables im n8n-Workspace:
+Zwei Data Tables existieren bereits zentral im edu-space-n8n-Workspace (Musterlösung):
 
 | Tabelle | Spalten | Genutzt von |
 |---|---|---|
-| `Attractions` | `AttractionID`, `Title`, `Description`, `Latitude`, `Longitude`, `Address`, `Telephone`, `Email`, `URL` | `get-attractions` (liest) |
-| `Comments` | `Name`, `Note`, `CreatedAt` | `add-comment` (schreibt) |
+| `Attractions` | `Title`, `Description`, `Latitude`, `Longitude`, `Address`, `Telephone`, `Email`, `URL` | `get-attractions` (liest), `add-attraction` (schreibt, s. u.) |
+| `Comments` | `Name`, `Note` | `add-comment` (schreibt) |
 
-Der `get-attractions`-Workflow liest die `Attractions`-Table statt die in `n8n.js`
-hinterlegten Demodaten zu spiegeln; der `add-comment`-Workflow fügt jede eingehende
-Bewertung (`payload.name`/`payload.note`) als neue Zeile in `Comments` ein. Die
-Webhook-Schnittstelle (Pfad, Request-/Response-Format) ändert sich für die PWA nicht.
+Dazu existieren bereits **unverdrahtete Vorlage-Workflows** (`Vorlage-PWA-GetAttractions`,
+`Vorlage-PWA-AddComment`) mit Webhook + leerem Data-Table-Node — das n8n-seitige Gegenstück
+zu den `//------`-Markern im PWA-Code. Teams **duplizieren diese Vorlage und verdrahten
+sie** (Data-Table-Node mit der bestehenden Tabelle verbinden), statt Tabelle und Workflow
+neu zu bauen. Die Webhook-Schnittstelle (Pfad, Request-/Response-Format) ändert sich für
+die PWA nicht.
 
-Per MCP ansteuerbar/vorbereitbar: `create_data_table`, `add_data_table_column`,
-`add_data_table_rows`, `search_data_tables`.
+Per MCP ansteuerbar/vorbereitbar: `search_data_tables`, `add_data_table_rows`
+(zusätzliche Testzeilen), `search_workflows`/`get_workflow_details` (Vorlagen inspizieren).
 
 ---
 
 ## Abnahmekriterien
 
-- [ ] Data Table `Attractions` existiert mit den oben genannten Spalten, befüllt mit
-      mindestens den bisherigen Demo-Attraktionen aus `n8n.js`
-- [ ] Data Table `Comments` existiert mit den oben genannten Spalten
-- [ ] `get-attractions`-Workflow liefert seine Antwort aus `Attractions` (nicht aus
+- [ ] Vorlage-Workflows für `get-attractions`/`add-comment` dupliziert (eigene Kopie pro Team)
+- [ ] Beide Kopien mit den bestehenden Data Tables `Attractions`/`Comments` verdrahtet und aktiviert
+- [ ] `get-attractions`-Kopie liefert ihre Antwort aus `Attractions` (nicht aus
       hart codierten Werten im Workflow)
-- [ ] `add-comment`-Workflow schreibt jede eingehende Bewertung als neue Zeile in
+- [ ] `add-comment`-Kopie schreibt jede eingehende Bewertung als neue Zeile in
       `Comments`
 - [ ] Ein über die PWA abgeschickter Kommentar ist nach einem Neustart/Neu-Deploy des
       n8n-Workflows weiterhin in `Comments` vorhanden
@@ -64,5 +65,7 @@ Per MCP ansteuerbar/vorbereitbar: `create_data_table`, `add_data_table_column`,
 
 - [ ] Sollen doppelte/leere Bewertungen serverseitig (im Workflow) zusätzlich validiert
       werden, oder reicht die clientseitige Validierung in `n8n.js`?
-- [ ] Wird `Attractions` je Team einmalig befüllt, oder soll es einen Pflege-Workflow
-      (Insert/Update) dafür geben?
+- [x] Wird `Attractions` je Team einmalig befüllt, oder soll es einen Pflege-Workflow
+      (Insert/Update) dafür geben? — **Geklärt:** ja, per KI-generiertem Pflege-Workflow,
+      s. die optionalen D-Aufgaben (`add-attraction`, noch zu dokumentieren als eigenes
+      Feature, s. `_meta/task.md`)
