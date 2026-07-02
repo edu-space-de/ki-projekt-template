@@ -49,6 +49,12 @@ cd ki-projekt-template
 4. **`ARCHITECTURE.md`** — Technologieentscheidungen festhalten
 5. **Beispiel-Feature löschen** — `requirements/01-example-feature/` durch eigene Features ersetzen
 
+> **Grundprinzip Bewertbarkeit:** Euer Projekt kann nur bewertet werden, wenn der Kern
+> (Code, Workflows, Datenschema, Doku) auf dem Kursserver liegt oder vollständig ins
+> Git-Repo exportierbar ist. Bequeme SaaS-Baukästen/„App-Generatoren" möglichst **vermeiden** —
+> sie lassen sich oft nicht sauber exportieren, dabei geht die Struktur verloren. Details:
+> **[ARCHITECTURE.md → ADR-06](ARCHITECTURE.md)**.
+
 ---
 
 ## Dateistruktur

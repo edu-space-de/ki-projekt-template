@@ -254,9 +254,33 @@ D3 hat (Stand 2026-07-02) noch keine unverdrahtete Übungs-Vorlage — nur die L
 
 ---
 
+### ADR-06: SaaS-Dienste vermeiden — selbst-hostbare, exportierbare Lösungen (Bewertbarkeit)
+
+**Datum:** 2026-07-02 · **Status:** akzeptiert
+**Kontext:** Studentische Projekte müssen **bewertet** werden. Bewertbar ist nur, was auf dem
+Kurs-/Hochschulserver liegt (z. B. `edu-space.de`: n8n, NocoDB) **oder** vollständig ins
+Git-Repo exportiert werden kann. Komfortable SaaS-Baukästen (gehostete No-Code-Plattformen,
+proprietäre Backend-/DB-Dienste, „App-Generatoren") liefern zwar schnell Ergebnisse, erlauben
+aber oft **keinen sauberen Export**: Beim Herauslösen gehen Struktur und Verdrahtung
+(Workflows, Datenschema, Konfiguration) verloren, und das Ergebnis lässt sich nicht
+reproduzierbar auf unserem Server ablegen — damit ist es faktisch nicht abnahmefähig.
+**Entscheidung:** Wo möglich **selbst-hostbare bzw. offen exportierbare** Werkzeuge bevorzugen,
+deren bewertbarer Kern auf dem Kursserver läuft oder vollständig im Git-Repo liegt: Code direkt
+im Repo; n8n-Workflows als exportierbares JSON auf `edu-space.de`; NocoDB/Data Tables mit
+eigener API/MCP (s. ADR-03). SaaS nur dort einsetzen, wo **austauschbar und ohne Lock-in**
+(z. B. Groq-LLM hinter n8n [ADR-05], Karten-Tiles [ADR-04]) — der bewertbare Kern (Code,
+Workflows, Schema, Doku) bleibt exportierbar und server-ablegbar.
+**Konsequenzen:** Etwas mehr Anfangsaufwand als ein Klick-SaaS, dafür reproduzierbar,
+bewertbar und ohne Datenverlust migrierbar. Wird ausnahmsweise ein externer Dienst im Kern
+genutzt, ist der **Exportweg zu dokumentieren** (`ARCHITECTURE.md`/`BACKLOG.md`) — sonst gilt
+das Feature als nicht abgenommen.
+
+---
+
 ## Bekannte Einschränkungen
 
 - Kein selbstgeschriebenes Backend — Datenanbindung über n8n (Webhooks + Data Tables, Mindestanforderung); NocoDB als Bonus (ADR-03)
 - Karte: Variante A (Google Maps) braucht Netz + API-Key; Variante B (Leaflet/OSM) ist keyfrei, aber ebenfalls online (keine Offline-Karten) — s. ADR-04
 - Fotos nur flüchtig (Object-URL/localStorage), kein Server-Upload im Kernumfang
 - Läuft nur im secure context (`http://localhost` / HTTPS), nicht per `file://`
+- Bewertbarer Kern muss server-ablegbar/exportierbar sein — SaaS mit Lock-in vermeiden (ADR-06)
