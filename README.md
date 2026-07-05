@@ -12,6 +12,10 @@ Diese Vorlage ist das Grundgerüst für ein KI-gestütztes Teamprojekt. Sie enth
 
 Das Prinzip: **Die Intelligenz steckt nicht im Einzelprompt — sie steckt in euren Markdown-Dateien.**
 
+> 🔒 **Sicherheit zuerst:** Bevor ihr loslegt, lest [`SECURITY.md`](SECURITY.md) — Umgang mit
+> API-Keys/Passwörtern (verbindliche Vorgabe, Prüfungsbestandteil). Kurz: Secrets nur in `.env`
+> (nie committen, `.env.example` als Muster), nie in KI-Tools einfügen, bei Leak sofort rotieren.
+
 ---
 
 ## Schnellstart — 3 Schritte
