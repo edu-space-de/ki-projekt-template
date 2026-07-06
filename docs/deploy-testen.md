@@ -62,7 +62,33 @@ Wichtig für die PWA: `PATH_ROOT` in `serviceworker.js` muss zum Slot-Pfad passe
 So können auch **andere Gruppen** euren Prototyp unter der URL testen — verschiedene
 Geräte, verschiedene Browser, echtes Feedback.
 
-## Weg 3: GitHub Pages (öffentlicher Showcase)
+## Weg 3: eduspace Pages (dauerhafte URL, ohne FTP)
+
+Unser Forgejo (`git.edu-space.de`) bietet — analog zu GitHub Pages — statisches
+HTTPS-Hosting: Alles im Branch **`static-pages`** eures Repos wird „as-is"
+ausgeliefert unter:
+
+```
+https://pages.git.edu-space.de/<org>/<repo>/
+```
+
+So veröffentlicht ihr:
+
+```bash
+# Webroot-Stand (index.html, assets/, manifest.json, serviceworker.js …)
+# in den Branch static-pages bringen:
+git switch -c static-pages     # einmalig anlegen
+git push -u origin static-pages
+# später bei Änderungen: static-pages aktualisieren und pushen
+```
+
+Nach dem Push ist die App unter der Pages-URL erreichbar — ideal für den Test auf
+dem eigenen Smartphone und für Feedback anderer Gruppen, ohne FTP-Zugangsdaten.
+
+Wichtig für die PWA: `PATH_ROOT` in `serviceworker.js` muss `/<org>/<repo>` sein,
+sonst cached der Serviceworker ins Leere.
+
+## Weg 4: GitHub Pages (öffentlicher Showcase)
 
 Liegt euer Repo (public) auf GitHub, gibt es kostenloses HTTPS-Hosting per Klick:
 
@@ -80,4 +106,5 @@ für Abgaben gilt weiterhin der Weg über euer Kurs-Repo (PR-Abgabe).
 |---|---|---|---|
 | localhost | tägliche Entwicklung | – (localhost = Secure Context) | keiner |
 | FTP-Slot + VS Code | Handy-Test, Gruppen-Feedback | `pwaXX.prj.edu-space.de` | einmalig 5 Min |
+| eduspace Pages | dauerhafte URL, ohne FTP | `pages.git.edu-space.de/<org>/<repo>` | einmalig 2 Min |
 | GitHub Pages | öffentlicher Showcase | `<user>.github.io/<repo>` | einmalig 2 Min |
