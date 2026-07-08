@@ -7,6 +7,10 @@ Zugangsdaten ist kein Bonus, sondern Grundhandwerk — im Studium wie im Beruf. 
 > **Grundregel:** Geheimnisse gehören **nie ins Repository, nie in KI-Tools, nie in
 > Screenshots/Tickets/Chats.** Im Zweifel: wie ein Geheimnis behandeln.
 
+> **Zusammenhang:** Diese Datei ist die **Sicherheits-Baseline**. Das Abnahme-Audit
+> [`AUDIT.md`](AUDIT.md) prüft ihre Einhaltung (Dimension 2.3 Sicherheit) zusammen mit
+> Zuverlässigkeit, Wartbarkeit und Performance — vor jeder Demo/LB3-Abgabe.
+
 ---
 
 ## Was zählt als Geheimnis?

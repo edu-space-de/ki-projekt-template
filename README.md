@@ -15,6 +15,10 @@ Das Prinzip: **Die Intelligenz steckt nicht im Einzelprompt — sie steckt in eu
 > 🔒 **Sicherheit zuerst:** Bevor ihr loslegt, lest [`SECURITY.md`](SECURITY.md) — Umgang mit
 > API-Keys/Passwörtern (verbindliche Vorgabe, Prüfungsbestandteil). Kurz: Secrets nur in `.env`
 > (nie committen, `.env.example` als Muster), nie in KI-Tools einfügen, bei Leak sofort rotieren.
+>
+> ✅ **Abgabe zuletzt:** Vor Demo/LB3-Abgabe lauft ihr das Abnahme-Audit nach [`AUDIT.md`](AUDIT.md)
+> (verbindliche Vorgabe, Prüfungsbestandteil) — prüft eure PWA auf Zuverlässigkeit, Wartbarkeit,
+> Sicherheit und Performance. Kein „fertig" ohne bestandenes bzw. begründet bewertetes Audit.
 
 ---
 
@@ -68,6 +72,8 @@ ki-projekt-template/
 ├── README.md                              ← Diese Datei — Einstieg
 ├── LICENSE                                ← MIT-Lizenz
 ├── CLAUDE.md                              ← KI-Kontext: Verhaltensregeln für den Agenten
+├── SECURITY.md                            ← Secret-Handhabung (verbindlich, Prüfungsbestandteil)
+├── AUDIT.md                               ← PWA-Abnahme-Audit (verbindlich, Prüfungsbestandteil)
 ├── ARCHITECTURE.md                        ← Systemaufbau und Technologieentscheidungen
 ├── ROADMAP.md                             ← Phasenplan, Abhängigkeitsgraph, Git-Workflow
 ├── .gitignore                             ← Vom Versionskontrolle ausgeschlossene Dateien
@@ -92,7 +98,7 @@ ki-projekt-template/
 ### Dateinamenskonvention
 
 **GROSSBUCHSTABEN** — Kritische Projektdateien, die der KI-Agent und alle Teammitglieder lesen und pflegen müssen:
-`CLAUDE.md`, `ARCHITECTURE.md`, `ROADMAP.md`, `REQUIREMENTS.md`, `BACKLOG.md`, `USERSTORY.md`, `FEATURE.md`, `IMPLEMENTATION.md`
+`CLAUDE.md`, `SECURITY.md`, `AUDIT.md`, `ARCHITECTURE.md`, `ROADMAP.md`, `REQUIREMENTS.md`, `BACKLOG.md`, `USERSTORY.md`, `FEATURE.md`, `IMPLEMENTATION.md`
 
 **Kleinbuchstaben** — Unterstützende Dateien, Konfiguration, Dokumentation:
 `README.md`, `.gitignore`, `.cursorrules`, `setup.md`

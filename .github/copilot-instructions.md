@@ -21,6 +21,8 @@
 
 | Datei | Inhalt |
 |---|---|
+| `SECURITY.md` | Secret-Handhabung (verbindlich, Prüfungsbestandteil) |
+| `AUDIT.md` | PWA-Abnahme-Audit — 4 Dimensionen, Ampel, Report (verbindlich, Prüfungsbestandteil) |
 | `ARCHITECTURE.md` | Systemaufbau, Technologiestack |
 | `requirements/REQUIREMENTS.md` | Anforderungen (Lastenheft / SRS) |
 | `requirements/BACKLOG.md` | Aktueller Stand aller Features |
@@ -30,7 +32,8 @@
 | `ROADMAP.md` | Phasenplan, Abhängigkeiten, Git-Workflow |
 
 Pflicht vor jeder Codeänderung: `ARCHITECTURE.md` lesen.  
-Pflicht nach Fertigstellung: `BACKLOG.md` aktualisieren (Status → `fertig`).
+Pflicht nach Fertigstellung: `BACKLOG.md` aktualisieren (Status → `fertig`).  
+Pflicht vor Demo/LB3-Abgabe: Abnahme-Audit nach `AUDIT.md` (alle vier Dimensionen), Report + Register.
 
 ---
 

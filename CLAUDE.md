@@ -23,6 +23,8 @@
 
 | Datei | Inhalt |
 |---|---|
+| `SECURITY.md` | Secret-Handhabung (verbindlich, Prüfungsbestandteil) |
+| `AUDIT.md` | PWA-Abnahme-Audit — 4 Prüfdimensionen, Ampel, Report (verbindlich, Prüfungsbestandteil) |
 | `ARCHITECTURE.md` | Systemaufbau, Technologiestack, Komponentenstruktur |
 | `requirements/REQUIREMENTS.md` | Vollständige Anforderungen (Lastenheft / SRS) |
 | `requirements/BACKLOG.md` | Aktueller Stand aller Features |
@@ -52,6 +54,11 @@
 - Alle Checkboxen in `IMPLEMENTATION.md` abgehakt?
 - Status in `BACKLOG.md` auf `✅ fertig` setzen
 - Commit mit vollständiger Nachricht erstellen
+
+### Vor Demo / LB3-Abgabe
+- Abnahme-Audit nach `AUDIT.md` durchführen (Voll-Audit: alle vier Dimensionen)
+- Report unter `docs/audit/` committen, Audit-Register in `AUDIT.md` fortschreiben
+- 🔴-Punkte beheben (v. a. Sicherheit), 🟡-Punkte begründen — kein „fertig" ohne Audit
 
 ---
 
