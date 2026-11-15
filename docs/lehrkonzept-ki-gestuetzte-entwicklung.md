@@ -145,7 +145,7 @@ Die `REQUIREMENTS.md` enthält für jedes Feature:
 
 **Aus dem Hackathon — Beispiel Feature 01, Kundensuche:**
 
-> Als Ausstattungsberater möchte ich einen Kunden nach seinem Namen suchen können, damit ich schnell das richtige Kundenprofil öffnen kann, ohne die interne Kundennummer kennen zu müssen.
+> Als Vertriebsmitarbeiter möchte ich einen Kunden nach seinem Namen suchen können, damit ich schnell das richtige Kundenprofil öffnen kann, ohne die interne Kundennummer kennen zu müssen.
 >
 > Akzeptanzkriterien: Eingabe von mindestens 2 Zeichen startet die Suche. Ergebnisse erscheinen für Vor- und Nachname. Bei mehreren Treffern werden alle angezeigt.
 
@@ -165,9 +165,9 @@ Das Backlog ist die **zentrale Statusübersicht** aller Features. Hier sieht man
 | # | Feature               | Status    | Beschreibung                                    |
 |---|---|---|---|
 | 01 | Kundensuche          | ✅ done   | Kunden nach Name, E-Mail oder Kundennummer      |
-| 02 | Projekt & Hausansicht | ✅ done   | Grundriss, Außenansicht, Basiskonfiguration     |
+| 02 | Projekt & Detailansicht | ✅ done  | Übersicht, Detailseite, Basiskonfiguration      |
 | 04 | Scannen & Konfigurieren | ✅ done | Artikel per Kamera-Scan identifizieren          |
-| 07 | Echtzeit-Visualisierung | open   | Artikel live im Grundriss einblenden            |
+| 07 | Echtzeit-Visualisierung | open   | Artikel live in der Detailansicht einblenden            |
 ```
 
 **Wichtiges Prinzip:** Wenn ein Feature abgeschlossen ist, wird der Status im Backlog von `open` auf `✅ done` geändert. Das geschieht nicht manuell — der KI-Agent aktualisiert diese Datei automatisch, wenn er die Aufgaben erledigt hat.
