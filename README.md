@@ -2,6 +2,7 @@
 
 > Vorlage für KI-gestützte Teamprojekte im Studium  
 > Grundlage: Hackathon an der Hochschule Offenburg, Mai 2026  
+> Betreut von [EDU-SPACE](https://github.com/edu-space-de) · MIT-Lizenz  
 > Zielgruppe: Wirtschaftsinformatik, E-Business, Marketing, Web-Technologien
 
 ---
